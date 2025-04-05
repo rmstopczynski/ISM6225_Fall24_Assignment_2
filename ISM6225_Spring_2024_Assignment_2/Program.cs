@@ -98,21 +98,22 @@ namespace Assignment_2
                 // 4. If the array contains duplicates, keep them in the same order.
                 // 5. If the array contains numbers outside the range of 0 to 100, ignore them.
 
+                if (nums == null || nums.Length == 0)
+                    return nums ?? Array.Empty<int>();
+
                 List<int> evens = new List<int>();
                 List<int> odds = new List<int>();
 
-                foreach(int num in nums)
+                foreach (int num in nums)
                 {
                     if (num % 2 == 0)
-                    {
                         evens.Add(num);
-                    }
                     else
-                    {
                         odds.Add(num);
-                    }
                 }
-                return nums; 
+
+                evens.AddRange(odds);
+                return evens.ToArray();
             }
             catch (Exception)
             {
@@ -156,18 +157,24 @@ namespace Assignment_2
         {
             try
             {
+
                 // Edge Cases:
-                // 1. If the array is empty, return 0.
-                // 2. If the array contains less than three elements, return 0.
-                // 3. If the array contains three elements, return their product.
-                // 4. If the array contains more than three elements, sort the array and calculate the maximum product of three numbers.   
+                // 1. If the array is empty, return an empty array.
+                // 2. If the array contains only one element, return an empty array.
+                // 3. If the array contains two elements, check if they sum to the target.
+                // 4. If the array contains duplicates, return the indices of the first two numbers that sum to 
+
+                if (nums == null || nums.Length < 3) return 0;
+                if (nums.Length == 3) return nums[0] * nums[1] * nums[2];
 
                 Array.Sort(nums);
                 int n = nums.Length;
-                int option1 = nums[n - 1] * nums[n - 2] * nums[n - 3];
-                int option2 = nums[n - 1] * nums[0] * nums[1];
 
-                return Math.Max(option1, option2);
+                // Using long to prevent overflow
+                long option1 = (long)nums[n - 1] * nums[n - 2] * nums[n - 3];
+                long option2 = (long)nums[n - 1] * nums[0] * nums[1];
+
+                return (int)Math.Max(option1, option2);
             }
             catch (Exception)
             {
@@ -189,6 +196,8 @@ namespace Assignment_2
 
                 if (decimalNumber == 0)
                         return "0";
+                if (decimalNumber < 0)
+                    return string.Empty;
 
                 string binary = string.Empty;
                 while (decimalNumber > 0)
@@ -215,6 +224,9 @@ namespace Assignment_2
                 // 3. If the array contains two elements, return the smaller one.
                 // 4. If the array is not rotated, return the first element.
                 // 5. If the array is rotated, find the minimum element using binary search.
+
+                if (nums == null || nums.Length == 0)
+                    throw new ArgumentException("Array cannot be empty");
 
                 int min = nums[0];
                 for (int i = 0; i < nums.Length; i++)
@@ -276,6 +288,10 @@ namespace Assignment_2
                 // 5. If n is greater than 2, calculate the Fibonacci number using iteration.
                 // 6. If n is greater than 30, return -1. 
 
+                if (n < 0)
+                    return -1;
+                if (n > 30)
+                    return -1;
                 if (n == 0)
                     return 0;
                 if (n == 1)
