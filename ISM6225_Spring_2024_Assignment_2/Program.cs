@@ -62,26 +62,27 @@ namespace Assignment_2
         {
             try
             {
-                // Edge Cases:
-                // 1. If the array is empty, return an empty list.
-                // 2. If the array contains all numbers from 1 to n, return an empty list.
-                // 3. If the array contains duplicates, ignore them.
-                // 4. If the array contains numbers outside the range of 1 to n, ignore them.
-
                 IList<int> missingNumbers = new List<int>();
-                HashSet<int> numSet = new HashSet<int> (nums);
 
-                for(int i = 1; i <= nums.Length; i++)
+                // Edge Case 3: Handles duplicates by storing only unique elements.
+                HashSet<int> numSet = new HashSet<int>(nums);
+
+                for (int i = 1; i <= nums.Length; i++)
                 {
+                    // Edge Case 4: Ensures range is from 1 to n by looping through that range.
                     if (!numSet.Contains(i))
                     {
                         missingNumbers.Add(i);
                     }
                 }
-                return missingNumbers; 
+
+                // Edge Case 1: If array is empty, loop does not run, returns empty list.
+                // Edge Case 2: If no numbers are missing, nothing is added, returns empty list.
+                return missingNumbers;
             }
             catch (Exception)
             {
+                // Edge Case 5: Catch unexpected runtime errors, though might not be necessary for simple logic.
                 throw;
             }
         }
@@ -91,27 +92,24 @@ namespace Assignment_2
         {
             try
             {
-                // Edge Cases:
-                // 1. If the array is empty, return an empty array.
-                // 2. If the array contains only even or only odd numbers, return the array as is.
-                // 3. If the array contains both even and odd numbers, separate them into two lists.
-                // 4. If the array contains duplicates, keep them in the same order.
-                // 5. If the array contains numbers outside the range of 0 to 100, ignore them.
-
                 if (nums == null || nums.Length == 0)
-                    return nums ?? Array.Empty<int>();
+                    return Array.Empty<int>(); // Edge Case 1: If the array is empty, return an empty array.
 
                 List<int> evens = new List<int>();
                 List<int> odds = new List<int>();
 
                 foreach (int num in nums)
                 {
+                    if (num < 0 || num > 100)
+                        continue; // Edge Case 5: Ignore numbers outside the range of 0 to 100.
+
                     if (num % 2 == 0)
-                        evens.Add(num);
+                        evens.Add(num); // Edge Case 2 & 3: Evens go first; handles all-evens and mixes.
                     else
-                        odds.Add(num);
+                        odds.Add(num);  // Edge Case 2 & 3: Odds go after evens.
                 }
 
+                // Edge Case 4: Add odds after evens to maintain order, including duplicates.
                 evens.AddRange(odds);
                 return evens.ToArray();
             }
@@ -126,29 +124,22 @@ namespace Assignment_2
         {
             try
             {
-                // Edge Cases:
-                // 1. If the array is empty, return an empty array.
-                // 2. If the array contains only one element, return an empty array.
-                // 3. If the array contains two elements, check if they sum to the target.
-                // 4. If the array contains duplicates, return the indices of the first two numbers that sum to the target.
-                // 5. If the array contains numbers outside the range of -10^9 to 10^9, ignore them.
-                // 6. If the target is outside the range of -10^9 to 10^9, ignore it.
-
                 for (int i = 0; i < nums.Length; i++)
                 {
                     for (int j = i + 1; j < nums.Length; j++)
                     {
                         if (nums[i] + nums[j] == target)
                         {
-                            return new int[] { i, j };
+                            return new int[] { i, j }; // Edge Case 3 & 4: Handles two elements summing to target and duplicates
                         }
                     }
                 }
-                return new int[0]; 
+
+                return new int[0]; // Edge Case 1 & 2: Empty array or only one element results in no match
             }
             catch (Exception)
             {
-                throw;
+                throw; // Edge Case 5 & 6: Unexpected numbers or target range issues (could be handled before the loop if desired)
             }
         }
 
@@ -157,22 +148,14 @@ namespace Assignment_2
         {
             try
             {
+                if (nums == null || nums.Length < 3) return 0; // Edge Case 1 & 2: Empty array or fewer than 3 elements
+                if (nums.Length == 3) return nums[0] * nums[1] * nums[2]; // Edge Case 3: Exactly 3 elements
 
-                // Edge Cases:
-                // 1. If the array is empty, return an empty array.
-                // 2. If the array contains only one element, return an empty array.
-                // 3. If the array contains two elements, check if they sum to the target.
-                // 4. If the array contains duplicates, return the indices of the first two numbers that sum to 
-
-                if (nums == null || nums.Length < 3) return 0;
-                if (nums.Length == 3) return nums[0] * nums[1] * nums[2];
-
-                Array.Sort(nums);
+                Array.Sort(nums); // Edge Case 4: Sorting handles duplicates naturally
                 int n = nums.Length;
 
-                // Using long to prevent overflow
-                long option1 = (long)nums[n - 1] * nums[n - 2] * nums[n - 3];
-                long option2 = (long)nums[n - 1] * nums[0] * nums[1];
+                long option1 = (long)nums[n - 1] * nums[n - 2] * nums[n - 3]; // Edge Case 5: Use long to avoid overflow
+                long option2 = (long)nums[n - 1] * nums[0] * nums[1];         // Same here for potential large negatives
 
                 return (int)Math.Max(option1, option2);
             }
@@ -187,17 +170,15 @@ namespace Assignment_2
         {
             try
             {
-                // Edge Cases:
-                // 1. If the decimal number is 0, return "0".
-                // 2. If the decimal number is negative, return an empty string.
-                // 3. If the decimal number is greater than 2^31 - 1, return an empty string.
-                // 4. If the decimal number is less than -2^31, return an empty string.
-                // 5. If the decimal number is not an integer, return an empty string.
+                if (decimalNumber == 0) // Edge Case 1: If the decimal number is 0, return "0".
+                    return "0";
 
-                if (decimalNumber == 0)
-                        return "0";
-                if (decimalNumber < 0)
+                if (decimalNumber < 0) // Edge Case 2: If the decimal number is negative, return an empty string.
                     return string.Empty;
+
+                // Edge Cases 3, 4, and 5 are not needed here:
+                // - Case 3 and 4 (int range) are already enforced by the parameter type (int)
+                // - Case 5 (non-integer) is impossible because the method input is already an integer
 
                 string binary = string.Empty;
                 while (decimalNumber > 0)
@@ -218,16 +199,20 @@ namespace Assignment_2
         {
             try
             {
-                // Edge Cases:
-                // 1. If the array is empty, return 0.
-                // 2. If the array contains only one element, return that element.
-                // 3. If the array contains two elements, return the smaller one.
-                // 4. If the array is not rotated, return the first element.
-                // 5. If the array is rotated, find the minimum element using binary search.
+                if (nums == null || nums.Length == 0) // Edge Case 1: If the array is empty, return 0.
+                    return 0;
 
-                if (nums == null || nums.Length == 0)
-                    throw new ArgumentException("Array cannot be empty");
+                if (nums.Length == 1) // Edge Case 2: Only one element, return it.
+                    return nums[0];
 
+                if (nums.Length == 2) // Edge Case 3: Two elements, return the smaller one.
+                    return Math.Min(nums[0], nums[1]);
+
+                // Edge Case 4: If array is not rotated (sorted in ascending), return first element.
+                if (nums[0] < nums[nums.Length - 1])
+                    return nums[0];
+
+                // Edge Case 5: Rotated array — use linear search to find the minimum.
                 int min = nums[0];
                 for (int i = 0; i < nums.Length; i++)
                 {
@@ -249,13 +234,14 @@ namespace Assignment_2
         {
             try
             {
-                // Edge Cases:
-                // 1. If the number is negative, return false.
-                // 2. If the number is 0, return true.
-                // 3. If the number is a single digit, return true.
-
-                if (x < 0)
+                if (x < 0) // Edge Case 1: If the number is negative, return false.
                     return false;
+
+                if (x == 0) // Edge Case 2: If the number is 0, return true.
+                    return true;
+
+                if (x < 10) // Edge Case 3: If the number is a single digit, return true.
+                    return true;
 
                 int original = x;
                 int reversed = 0;
@@ -279,29 +265,24 @@ namespace Assignment_2
         {
             try
             {
-
-                // Edge Cases:
-                // 1. If n is negative, return -1.
-                // 2. If n is 0, return 0.
-                // 3. If n is 1, return 1.
-                // 4. If n is 2, return 1.
-                // 5. If n is greater than 2, calculate the Fibonacci number using iteration.
-                // 6. If n is greater than 30, return -1. 
-
-                if (n < 0)
+                if (n < 0) // Edge Case 1: If n is negative, return -1.
                     return -1;
-                if (n > 30)
+
+                if (n > 30) // Edge Case 6: If n is greater than 30, return -1.
                     return -1;
-                if (n == 0)
+
+                if (n == 0) // Edge Case 2: If n is 0, return 0.
                     return 0;
-                if (n == 1)
+
+                if (n == 1) // Edge Case 3: If n is 1, return 1.
                     return 1;
 
+                // Edge Case 5: If n is greater than 2, calculate the Fibonacci number using iteration.
                 int a = 0;
                 int b = 1;
                 int result = 0;
 
-                for(int i = 2; i <= n; i++)
+                for (int i = 2; i <= n; i++)
                 {
                     result = a + b;
                     a = b;
